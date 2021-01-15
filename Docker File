@@ -1,0 +1,8 @@
+FROM jenkins/jnlp-slave:3.27-1-alpine
+USER root
+RUN apk add docker
+USER jenkins
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.0
+WORKDIR /app
+COPY --from=build-env /app/out .
+ENTRYPOINT ["jenkins-slave", "dotnet", "aspnetapp.dll"]
